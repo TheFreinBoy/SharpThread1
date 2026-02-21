@@ -1,0 +1,14 @@
+/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/bin/Debug/net10.0/SharpThread
+/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/bin/Debug/net10.0/SharpThread.deps.json
+/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/bin/Debug/net10.0/SharpThread.runtimeconfig.json
+/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/bin/Debug/net10.0/SharpThread.dll
+/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/bin/Debug/net10.0/SharpThread.pdb
+/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/obj/Debug/net10.0/SharpThread.GeneratedMSBuildEditorConfig.editorconfig
+/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/obj/Debug/net10.0/SharpThread.AssemblyInfoInputs.cache
+/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/obj/Debug/net10.0/SharpThread.AssemblyInfo.cs
+/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/obj/Debug/net10.0/SharpThread.csproj.CoreCompileInputs.cache
+/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/obj/Debug/net10.0/SharpThread.dll
+/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/obj/Debug/net10.0/refint/SharpThread.dll
+/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/obj/Debug/net10.0/SharpThread.pdb
+/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/obj/Debug/net10.0/SharpThread.genruntimeconfig.cache
+/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/obj/Debug/net10.0/ref/SharpThread.dll
