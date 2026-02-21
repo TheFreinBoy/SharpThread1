@@ -26,7 +26,6 @@ namespace SharpThread
             stopper.Start();
         }
 
-        // Метод приймає object, щоб відповідати делегату ParameterizedThreadStart
         void Calculator(object obj)
         {
             int threadIndex = (int)obj;
