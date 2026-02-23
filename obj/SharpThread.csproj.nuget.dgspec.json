@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/SharpThread.csproj": {}
+    "/Users/empress/Documents/Study/Programing/1LabTread/SharpThread/SharpThread.csproj": {}
   },
   "projects": {
-    "/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/SharpThread.csproj": {
+    "/Users/empress/Documents/Study/Programing/1LabTread/SharpThread/SharpThread.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/SharpThread.csproj",
+        "projectUniqueName": "/Users/empress/Documents/Study/Programing/1LabTread/SharpThread/SharpThread.csproj",
         "projectName": "SharpThread",
-        "projectPath": "/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/SharpThread.csproj",
+        "projectPath": "/Users/empress/Documents/Study/Programing/1LabTread/SharpThread/SharpThread.csproj",
         "packagesPath": "/Users/empress/.nuget/packages/",
-        "outputPath": "/Users/empress/Documents/ Study/Programing/1LabTread/SharpThread/obj/",
+        "outputPath": "/Users/empress/Documents/Study/Programing/1LabTread/SharpThread/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/empress/.nuget/NuGet/NuGet.Config"

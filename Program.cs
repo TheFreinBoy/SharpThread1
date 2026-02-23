@@ -1,13 +1,12 @@
-﻿using System;
-using System.Threading;
-
+﻿
 namespace SharpThread
 {
     class Program
     {
-        private volatile bool[] canStop = new bool[4];
-
-        static void Main(string[] args)
+        private static int _threadCount = 8;
+        private static bool[] _canStop = new bool[_threadCount];
+        
+        static void Main()
         {
             new Program().Start();
         }
@@ -16,7 +15,7 @@ namespace SharpThread
         {
             Console.WriteLine("Запуск обчислень...\n");
             
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < _threadCount; i++)
             {
                 Thread t = new Thread(Calculator);
                 t.Start(i); 
@@ -26,7 +25,6 @@ namespace SharpThread
             stopper.Start();
         }
 
-        // Метод приймає object, щоб відповідати делегату ParameterizedThreadStart
         void Calculator(object obj)
         {
             int threadIndex = (int)obj;
@@ -43,22 +41,22 @@ namespace SharpThread
                 count++;
                 currentNumber += step;
 
-            } while (!canStop[threadIndex]);
+            } while (!Volatile.Read(ref _canStop[threadIndex]));
             
             Console.WriteLine($"[Потік {threadId}] завершив роботу. " +
                               $"Крок: {step,2} | Доданків: {count,9} | Сума: {sum}");
         }
 
-        public void Stopper()
+        private void Stopper()
         {
             Random rnd = new Random();
             
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < _threadCount; i++)
             {
                 int delay = rnd.Next(1000, 2000);
                 Thread.Sleep(delay);
                 
-                canStop[i] = true;
+                Volatile.Write(ref _canStop[i], true);
                 
             }
         }
