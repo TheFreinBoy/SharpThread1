@@ -1,35 +1,80 @@
-﻿
+﻿using System.Text;
+using System.Diagnostics;
+
+
+
 namespace SharpThread
 {
     class Program
     {
-        private static int _threadCount = 8;
-        private static bool[] _canStop = new bool[_threadCount];
-        
+        private static bool[] _canStop;
+
         static void Main()
         {
+            Console.OutputEncoding = Encoding.UTF8;
             new Program().Start();
         }
 
         void Start()
         {
-            Console.WriteLine("Запуск обчислень...\n");
-            
-            for (int i = 0; i < _threadCount; i++)
+            while (true)
             {
-                Thread t = new Thread(Calculator);
-                t.Start(i); 
+                Console.WriteLine("Введіть крок роботи потоків (0 для виходу):");
+                if (!int.TryParse(Console.ReadLine(), out int step) || step == 0)
+                {
+                    break; 
+                }
+
+                Console.WriteLine("Введіть час роботи потоків у секундах через пробіл:");
+                string input = Console.ReadLine();
+                
+                int[] workTimes = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                                       .Select(int.Parse)
+                                       .ToArray();
+
+                int threadCount = workTimes.Length;
+                _canStop = new bool[threadCount]; 
+
+                Thread[] workers = new Thread[threadCount];
+                
+                for (int i = 0; i < threadCount; i++)
+                {
+                    workers[i] = new Thread(Calculator);
+                    
+                    ThreadData data = new ThreadData 
+                    { 
+                        Index = i, 
+                        Step = step, 
+                        WorkTimeSeconds = workTimes[i] 
+                    };
+                    
+                    workers[i].Start(data);
+                }
+                
+                Thread stopper = new Thread(Stopper);
+                stopper.Start(workTimes);
+                
+                foreach (Thread t in workers)
+                {
+                    t.Join();
+                }
+                stopper.Join();
+
+                Console.WriteLine("Усі потоки завершили роботу. Починаємо новий цикл.\n");
             }
-            
-            Thread stopper = new Thread(Stopper);
-            stopper.Start();
+        }
+        
+        class ThreadData
+        {
+            public int Index;
+            public int Step;
+            public int WorkTimeSeconds;
         }
 
         void Calculator(object obj)
         {
-            int threadIndex = (int)obj;
-            int threadId = threadIndex + 1; 
-            int step = threadId * 2;        
+            ThreadData data = (ThreadData)obj;
+            int threadId = data.Index + 1;
 
             long sum = 0;
             long count = 0;
@@ -39,25 +84,36 @@ namespace SharpThread
             {
                 sum += currentNumber;
                 count++;
-                currentNumber += step;
+                currentNumber += data.Step;
 
-            } while (!Volatile.Read(ref _canStop[threadIndex]));
+            } while (!Volatile.Read(ref _canStop[data.Index]));
             
-            Console.WriteLine($"[Потік {threadId}] завершив роботу. " +
-                              $"Крок: {step,2} | Доданків: {count,9} | Сума: {sum}");
+            Console.WriteLine($"[Потік №{threadId}] Сума: {sum} | Крок: {data.Step} | Доданків: {count} | Час: {data.WorkTimeSeconds} сек.");
         }
 
-        private void Stopper()
+        private void Stopper(object obj)
         {
-            Random rnd = new Random();
+            int[] times = (int[])obj;
+            Stopwatch sw = Stopwatch.StartNew(); 
             
-            for (int i = 0; i < _threadCount; i++)
+            int activeCount = times.Length;
+            bool[] stopped = new bool[times.Length]; 
+            
+            while (activeCount > 0)
             {
-                int delay = rnd.Next(1000, 2000);
-                Thread.Sleep(delay);
+                double elapsedSeconds = sw.Elapsed.TotalSeconds;
+
+                for (int i = 0; i < times.Length; i++)
+                {
+                    if (!stopped[i] && elapsedSeconds >= times[i])
+                    {
+                        Volatile.Write(ref _canStop[i], true); 
+                        stopped[i] = true;
+                        activeCount--;
+                    }
+                }
                 
-                Volatile.Write(ref _canStop[i], true);
-                
+                Thread.Sleep(50); 
             }
         }
     }
