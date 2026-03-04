@@ -1,7 +1,7 @@
-﻿using System.Text;
+﻿using System;
 using System.Diagnostics;
-
-
+using System.Linq;
+using System.Threading;
 
 namespace SharpThread
 {
@@ -11,59 +11,62 @@ namespace SharpThread
 
         static void Main()
         {
-            Console.OutputEncoding = Encoding.UTF8;
             new Program().Start();
         }
 
         void Start()
         {
-            while (true)
+            Console.WriteLine("Введіть крок роботи потоків:");
+            if (!int.TryParse(Console.ReadLine(), out int step))
             {
-                Console.WriteLine("Введіть крок для роботи потоків (0 для виходу):");
-                if (!int.TryParse(Console.ReadLine(), out int step) || step == 0)
-                {
-                    break; 
-                }
-
-                Console.WriteLine("Введіть час роботи потоків:");
-                string input = Console.ReadLine();
-                
-                int[] workTimes = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                                       .Select(int.Parse)
-                                       .ToArray();
-
-                int threadCount = workTimes.Length;
-                _canStop = new bool[threadCount]; 
-
-                Thread[] workers = new Thread[threadCount];
-                
-                for (int i = 0; i < threadCount; i++)
-                {
-                    workers[i] = new Thread(Calculator);
-                    
-                    ThreadData data = new ThreadData 
-                    { 
-                        Index = i, 
-                        Step = step, 
-                        WorkTimeSeconds = workTimes[i] 
-                    };
-                    
-                    workers[i].Start(data);
-                }
-                
-                Thread stopper = new Thread(Stopper);
-                stopper.Start(workTimes);
-                
-                foreach (Thread t in workers)
-                {
-                    t.Join();
-                }
-                stopper.Join();
-
-                Console.WriteLine("Всі потоки завершили роботу. Розпочинаємо новий цикл.\n");
+                Console.WriteLine("Некоректний ввід. Програму завершено.");
+                return;
             }
+            
+            Console.WriteLine("Введіть час роботи потоків у секундах через пробіл:");
+            string input = Console.ReadLine();
+            
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                 Console.WriteLine("Некоректний ввід часу. Програму завершено.");
+                 return;
+            }
+
+            int[] workTimes = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                                   .Select(int.Parse)
+                                   .ToArray();
+
+            int threadCount = workTimes.Length;
+            _canStop = new bool[threadCount];
+
+            Thread[] workers = new Thread[threadCount];
+            
+            for (int i = 0; i < threadCount; i++)
+            {
+                workers[i] = new Thread(Calculator);
+                
+                ThreadData data = new ThreadData 
+                { 
+                    Index = i, 
+                    Step = step, 
+                    WorkTimeSeconds = workTimes[i] 
+                };
+                
+                workers[i].Start(data);
+            }
+            
+            Thread stopper = new Thread(Stopper);
+            stopper.Start(workTimes);
+            
+            foreach (Thread t in workers)
+            {
+                t.Join();
+            }
+            stopper.Join();
+
+            Console.WriteLine("Усі потоки завершили роботу.");
         }
-        
+
         class ThreadData
         {
             public int Index;
