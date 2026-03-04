@@ -19,13 +19,13 @@ namespace SharpThread
         {
             while (true)
             {
-                Console.WriteLine("Введіть крок роботи потоків (0 для виходу):");
+                Console.WriteLine("Введіть крок для роботи потоків (0 для виходу):");
                 if (!int.TryParse(Console.ReadLine(), out int step) || step == 0)
                 {
                     break; 
                 }
 
-                Console.WriteLine("Введіть час роботи потоків у секундах через пробіл:");
+                Console.WriteLine("Введіть час роботи потоків:");
                 string input = Console.ReadLine();
                 
                 int[] workTimes = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
@@ -60,7 +60,7 @@ namespace SharpThread
                 }
                 stopper.Join();
 
-                Console.WriteLine("Усі потоки завершили роботу. Починаємо новий цикл.\n");
+                Console.WriteLine("Всі потоки завершили роботу. Розпочинаємо новий цикл.\n");
             }
         }
         
