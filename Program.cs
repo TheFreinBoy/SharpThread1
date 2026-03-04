@@ -1,4 +1,5 @@
-﻿
+﻿using System.Diagnostics;
+
 namespace SharpThread
 {
     class Program
@@ -35,6 +36,8 @@ namespace SharpThread
             long count = 0;
             long currentNumber = 0;
             
+            Stopwatch timer = Stopwatch.StartNew();
+            
             do
             {
                 sum += currentNumber;
@@ -43,8 +46,10 @@ namespace SharpThread
 
             } while (!Volatile.Read(ref _canStop[threadIndex]));
             
+            timer.Stop();
+            
             Console.WriteLine($"[Потік {threadId}] завершив роботу. " +
-                              $"Крок: {step,2} | Доданків: {count,9} | Сума: {sum}");
+                              $"Крок: {step,2} | Доданків: {count,9} | Сума: {sum} | Час: {timer.Elapsed.TotalSeconds:F2} сек.");
         }
 
         private void Stopper()
@@ -57,7 +62,6 @@ namespace SharpThread
                 Thread.Sleep(delay);
                 
                 Volatile.Write(ref _canStop[i], true);
-                
             }
         }
     }
